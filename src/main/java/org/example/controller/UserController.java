@@ -42,7 +42,7 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
             log.info("code={}",code);
             // 调用阿里云短信服务api
-            /*SMSUtils.sendMessage("瑞吉外卖","SMS_154950909",phone,code);*/
+            /*SMSUtils.sendMessage("阿里云短信测试","SMS_154950909",phone,code);*/
             // 将生成的验证码保存到Sesstion
             sesstion.setAttribute(phone,code);
 
