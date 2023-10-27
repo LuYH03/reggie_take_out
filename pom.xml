@@ -13,7 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <java.version>10</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -96,6 +96,13 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
+
+        <!-- knife4j 为java MVC框架集成Swagger生成Api文档的增强解决方案-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>3.0.2</version>
+        </dependency>
 
     </dependencies>
 

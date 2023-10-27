@@ -1,6 +1,7 @@
 package org.example.controller;
 
 
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.R;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/common")
 @Slf4j
+@Api(tags = "文件传输相关接口")
 public class CommonController {
 
     @Value("${reggie.path}")

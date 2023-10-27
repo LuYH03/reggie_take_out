@@ -2,15 +2,15 @@ package org.example.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.example.common.R;
 import org.example.entity.User;
 import org.example.service.UserService;
-import org.example.utils.SMSUtils;
 import org.example.utils.ValidateCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/user")
 @Slf4j
+@Api(tags = "用户相关接口")
 public class UserController {
 
     @Autowired
@@ -41,6 +42,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/sendMsg")
+    @ApiOperation(value = "发送短信验证接口")
     public R<String> sendMsg(@RequestBody User user, HttpSession sesstion){
         // 获取手机号
         String phone = user.getPhone();
@@ -71,6 +73,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
+    @ApiOperation(value = "移动端用户登录接口")
     public R<User> login(@RequestBody Map map, HttpSession session){
         log.info(map.toString());
         // 获取手机号

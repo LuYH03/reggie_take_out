@@ -2,6 +2,8 @@ package org.example.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.BaseContext;
 import org.example.common.R;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping("/shoppingCart")
 @Transactional
 @Slf4j
+@Api(tags = "购物车相关接口")
 public class ShoppingCartController {
 
     @Autowired
@@ -31,6 +34,7 @@ public class ShoppingCartController {
      * @return
      */
     @PostMapping("/add")
+    @ApiOperation(value = "购物车新增接口")
     public R<ShoppingCart> add(@RequestBody ShoppingCart shoppingCart) {
         log.info("购物车数据：{}", shoppingCart);
         // 设置用户id，指定当前是那个用户的购物车数据
@@ -74,6 +78,7 @@ public class ShoppingCartController {
      * @return
      */
     @GetMapping("/list")
+    @ApiOperation(value = "购物车条件查询接口")
     public R<List<ShoppingCart>> list(){
         log.info("查看购物车...");
         LambdaQueryWrapper<ShoppingCart> wrapper = new LambdaQueryWrapper<>();
@@ -86,6 +91,7 @@ public class ShoppingCartController {
 
 
     @DeleteMapping("/clean")
+    @ApiOperation(value = "购物车批量删除接口")
     public R<String> delete(){
         // SQL：delete from shoppingCart where user_id = ?
         LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper = new LambdaQueryWrapper<>();

@@ -3,6 +3,7 @@ package org.example.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.example.common.R;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/employee")
 @Slf4j
+@Api(tags = "员工相关接口")
 public class EmployeeController {
 
     @Autowired
