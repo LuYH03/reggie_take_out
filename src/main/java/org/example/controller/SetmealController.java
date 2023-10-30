@@ -184,7 +184,7 @@ public class SetmealController {
 
 
     /**
-     * 根据id查询套餐信息
+     * 根据id查询套餐信息 --套餐数据回显
      * @param id
      * @return
      */
@@ -214,11 +214,10 @@ public class SetmealController {
     @ApiOperation(value = "套餐修改接口")
     public R<String> updateById(@RequestBody SetmealDto setmealDto){
         log.info("SetmealDto = {}",setmealDto);
-        setmealService.updateWithDish(setmealDto);
-        return R.success("套餐修改成功");
+
+        R<String> result = setmealService.updateWithDish(setmealDto);
+        return result;
     }
-
-
 
 
 }

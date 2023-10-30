@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.example.common.R;
 import org.example.entity.User;
 import org.example.service.UserService;
+import org.example.utils.SMSUtils;
 import org.example.utils.ValidateCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -52,7 +54,7 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
             log.info("code={}",code);
             // 调用阿里云短信服务api
-            /*SMSUtils.sendMessage("阿里云短信测试","SMS_154950909",phone,code);*/
+            SMSUtils.sendMessage("阿里云短信测试","SMS_154950909",phone,code);
             // 将生成的验证码保存到Sesstion
             // sesstion.setAttribute(phone,code);
 
@@ -105,6 +107,19 @@ public class UserController {
         }
 
         return R.error("登录失败");
+    }
+
+
+    /**
+     * 移动用户端退出功能
+     * @param request
+     * @return
+     */
+    @PostMapping("/loginout")
+    @ApiOperation(value = "用户退出接口")
+    public R<String> logOut(HttpServletRequest request) {
+        request.removeAttribute("user");
+        return R.success("用户退出成功");
     }
 
 

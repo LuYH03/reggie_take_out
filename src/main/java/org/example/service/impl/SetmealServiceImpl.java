@@ -3,6 +3,7 @@ package org.example.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.common.CustomExcption;
+import org.example.common.R;
 import org.example.dto.SetmealDto;
 import org.example.entity.Setmeal;
 import org.example.entity.SetmealDish;
@@ -74,8 +75,17 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
      * @param setmealDto
      */
     @Override
-    public void updateWithDish(SetmealDto setmealDto) {
+    public R<String> updateWithDish(SetmealDto setmealDto) {
 
+        if (setmealDto == null){
+            return R.error("请求异常");
+        }
+
+        if (setmealDto.getSetmealDishes() == null){
+            return R.error("套餐中没有菜品,请先添加菜品");
+        }
+
+        // 删除套餐基本信息
         this.updateById(setmealDto);
 
         // 先删除菜品关联关系，再填充新的数据
@@ -91,5 +101,6 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         }
 
         setmealDishService.saveBatch(setmealDishes);
+        return R.success("套餐修改成功");
     }
 }

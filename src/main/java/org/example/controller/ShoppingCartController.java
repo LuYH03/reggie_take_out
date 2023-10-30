@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.common.BaseContext;
 import org.example.common.R;
 import org.example.entity.ShoppingCart;
+import org.example.service.OrderDetailService;
 import org.example.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,17 +90,68 @@ public class ShoppingCartController {
     }
 
 
-
+    /**
+     * 清空购物车
+     * @return
+     */
     @DeleteMapping("/clean")
     @ApiOperation(value = "购物车批量删除接口")
     public R<String> delete(){
         // SQL：delete from shoppingCart where user_id = ?
-        LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
-        shoppingCartService.remove(lambdaQueryWrapper);
+        shoppingCartService.clean();
         return R.success("数据清空成功");
     }
 
+
+    /**
+     * 移动端购物车数量减少
+     * @param shoppingCart
+     * @return
+     */
+    @PostMapping("/sub")
+    @Transactional
+    public R<ShoppingCart> sub(@RequestBody ShoppingCart shoppingCart) {
+        Long dishId = shoppingCart.getDishId();
+        if (dishId != null){  // 传过来的是菜品id，需要修改菜品的数量
+            //通过dishId查出购物车对象
+            //这里必须要加两个条件，否则会出现用户互相修改对方与自己购物车中相同套餐或者是菜品的数量
+            LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<ShoppingCart>()
+                    .eq(ShoppingCart::getDishId,dishId)
+                    .eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
+            ShoppingCart cartdish = shoppingCartService.getOne(queryWrapper);
+            cartdish.setNumber(cartdish.getNumber() -1);
+            Integer lastNumber = cartdish.getNumber();
+            if (lastNumber > 0){
+                shoppingCartService.updateById(cartdish);
+            }else if (lastNumber == 0){
+                shoppingCartService.removeById(cartdish.getId());
+            }else if (lastNumber < 0){
+                return R.error("操作异常");
+            }
+            return R.success(cartdish);
+         }
+
+        Long setmealId = shoppingCart.getSetmealId();
+        if (setmealId != null){   // 传过来的是套餐id，修改套餐数量
+            LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<ShoppingCart>()
+                    .eq(ShoppingCart::getSetmealId,setmealId)
+                    .eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
+            ShoppingCart cartSetmeal = shoppingCartService.getOne(queryWrapper);
+
+            cartSetmeal.setNumber(cartSetmeal.getNumber() -1);
+            Integer lastNumber = cartSetmeal.getNumber();
+            if (lastNumber > 0){
+                shoppingCartService.updateById(cartSetmeal);
+            }else if (lastNumber == 0){
+                shoppingCartService.removeById(cartSetmeal.getId());
+            }else if (lastNumber < 0){
+                return R.error("操作异常");
+            }
+            return R.success(cartSetmeal);
+        }
+        // 如果两个if判断都进不去
+        return R.error("操作异常");
+    }
 
 
 

@@ -1,6 +1,7 @@
 package org.example.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.example.common.R;
 import org.example.dto.SetmealDto;
 import org.example.entity.Setmeal;
 
@@ -15,5 +16,5 @@ public interface SetmealService extends IService<Setmeal> {
     public void deleteWithDish(List<Long> ids);
 
     // 修改套餐，同时修改套餐和菜品的关联关系
-    void updateWithDish(SetmealDto setmealDto);
+    public R<String> updateWithDish(SetmealDto setmealDto);
 }
